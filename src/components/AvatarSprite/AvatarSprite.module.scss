@@ -1,0 +1,12 @@
+.sprite {
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.image {
+  display: block;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+}

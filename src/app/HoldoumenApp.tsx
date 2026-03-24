@@ -1,0 +1,285 @@
+"use client";
+
+import Image from "next/image";
+import type { CSSProperties, FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { HOLDOUMEN_COPY } from "@/data/holdoumen/copy";
+import { HOLDOUMEN_IMAGES } from "@/data/holdoumen/images";
+import { HOLDOUMEN_MEMBERS } from "@/data/holdoumen/members";
+import { HOLDOUMEN_THEME } from "@/data/holdoumen/theme";
+import type { ChatMessage, Member } from "@/types/holdoumen";
+
+import { AvatarSprite } from "../components/AvatarSprite";
+import { MemberCard } from "../components/MemberCard";
+import styles from "./HoldoumenApp.module.scss";
+
+type ViewMode = "picker" | "chat";
+
+type AppStyle = CSSProperties & {
+  "--page-gradient": string;
+  "--shell-gradient": string;
+  "--warm-glow": string;
+  "--cool-glow": string;
+  "--text-primary": string;
+  "--text-secondary": string;
+  "--text-muted": string;
+  "--divider": string;
+  "--surface": string;
+  "--surface-soft": string;
+  "--strong-surface": string;
+  "--button-text": string;
+  "--input-border": string;
+  "--shell-shadow": string;
+  "--selected-member-rgb": string;
+};
+
+function createWelcomeMessage(member: Member): ChatMessage {
+  return {
+    id: `${member.id}-welcome`,
+    role: "assistant",
+    text: member.greeting,
+  };
+}
+
+function buildInitialMessages() {
+  return HOLDOUMEN_MEMBERS.reduce<Record<string, ChatMessage[]>>((accumulator, member) => {
+    accumulator[member.id] = [createWelcomeMessage(member)];
+    return accumulator;
+  }, {});
+}
+
+function buildInitialReplyState() {
+  return HOLDOUMEN_MEMBERS.reduce<Record<string, number>>((accumulator, member) => {
+    accumulator[member.id] = 0;
+    return accumulator;
+  }, {});
+}
+
+function nextMessageId() {
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+export function HoldoumenApp() {
+  const [viewMode, setViewMode] = useState<ViewMode>("picker");
+  const [selectedMemberId, setSelectedMemberId] = useState(HOLDOUMEN_MEMBERS[0]?.id ?? "");
+  const [draft, setDraft] = useState("");
+  const [messagesByMember, setMessagesByMember] = useState(buildInitialMessages);
+
+  const replyIndexRef = useRef(buildInitialReplyState());
+  const replyTimerRef = useRef<number | null>(null);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  const selectedMember =
+    HOLDOUMEN_MEMBERS.find((member) => member.id === selectedMemberId) ?? HOLDOUMEN_MEMBERS[0];
+
+  const currentMessages = selectedMember ? (messagesByMember[selectedMember.id] ?? []) : [];
+
+  const appStyle: AppStyle = {
+    "--page-gradient": HOLDOUMEN_THEME.pageGradient,
+    "--shell-gradient": HOLDOUMEN_THEME.shellGradient,
+    "--warm-glow": HOLDOUMEN_THEME.warmGlow,
+    "--cool-glow": HOLDOUMEN_THEME.coolGlow,
+    "--text-primary": HOLDOUMEN_THEME.textPrimary,
+    "--text-secondary": HOLDOUMEN_THEME.textSecondary,
+    "--text-muted": HOLDOUMEN_THEME.textMuted,
+    "--divider": HOLDOUMEN_THEME.divider,
+    "--surface": HOLDOUMEN_THEME.surface,
+    "--surface-soft": HOLDOUMEN_THEME.surfaceSoft,
+    "--strong-surface": HOLDOUMEN_THEME.strongSurface,
+    "--button-text": HOLDOUMEN_THEME.buttonText,
+    "--input-border": HOLDOUMEN_THEME.inputBorder,
+    "--shell-shadow": HOLDOUMEN_THEME.shellShadow,
+    "--selected-member-rgb": selectedMember?.supportRgb ?? HOLDOUMEN_MEMBERS[0]?.supportRgb ?? "226, 164, 99",
+  };
+
+  useEffect(() => {
+    if (viewMode !== "chat") {
+      return;
+    }
+
+    messageEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [currentMessages.length, selectedMember?.id, viewMode]);
+
+  useEffect(() => {
+    return () => {
+      if (replyTimerRef.current) {
+        window.clearTimeout(replyTimerRef.current);
+      }
+    };
+  }, []);
+
+  function clearReplyTimer() {
+    if (replyTimerRef.current) {
+      window.clearTimeout(replyTimerRef.current);
+      replyTimerRef.current = null;
+    }
+  }
+
+  function handleSelectMember(member: Member) {
+    clearReplyTimer();
+    setDraft("");
+    setSelectedMemberId(member.id);
+    setViewMode("chat");
+  }
+
+  function handleSwitchRole() {
+    clearReplyTimer();
+    setDraft("");
+    setViewMode("picker");
+  }
+
+  function appendAssistantReply(memberId: string) {
+    const member = HOLDOUMEN_MEMBERS.find((item) => item.id === memberId);
+    if (!member) {
+      return;
+    }
+
+    const nextIndex = replyIndexRef.current[memberId] ?? 0;
+    const reply = member.replies[nextIndex % member.replies.length];
+    replyIndexRef.current[memberId] = nextIndex + 1;
+
+    setMessagesByMember((previous) => ({
+      ...previous,
+      [memberId]: [
+        ...(previous[memberId] ?? [createWelcomeMessage(member)]),
+        {
+          id: nextMessageId(),
+          role: "assistant",
+          text: reply,
+        },
+      ],
+    }));
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!selectedMember) {
+      return;
+    }
+
+    const content = draft.trim();
+    if (!content) {
+      return;
+    }
+
+    clearReplyTimer();
+
+    setMessagesByMember((previous) => ({
+      ...previous,
+      [selectedMember.id]: [
+        ...(previous[selectedMember.id] ?? [createWelcomeMessage(selectedMember)]),
+        {
+          id: nextMessageId(),
+          role: "user",
+          text: content,
+        },
+      ],
+    }));
+    setDraft("");
+
+    replyTimerRef.current = window.setTimeout(() => {
+      appendAssistantReply(selectedMember.id);
+      replyTimerRef.current = null;
+    }, 420);
+  }
+
+  if (!selectedMember) {
+    return null;
+  }
+
+  return (
+    <div className={styles.app} style={appStyle}>
+      <main className={styles.phoneShell}>
+        {viewMode === "picker" ? (
+          <section className={`${styles.screen} ${styles.homeScreen}`}>
+            <div className={styles.hero}>
+              <div className={styles.signWrap} aria-hidden="true">
+                <Image
+                  className={styles.sign}
+                  src={HOLDOUMEN_IMAGES.roadSign}
+                  alt=""
+                  width={278}
+                  height={193}
+                />
+              </div>
+
+              <p className={styles.marquee}>{HOLDOUMEN_COPY.heroDescription}</p>
+            </div>
+
+            <div className={styles.memberList} aria-label="成员列表">
+              {HOLDOUMEN_MEMBERS.map((member) => (
+                <MemberCard key={member.id} member={member} onSelect={handleSelectMember} />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section className={`${styles.screen} ${styles.chatScreen}`}>
+            <header className={styles.chatHeader}>
+              <div className={styles.chatMember}>
+                <span className={styles.chatAvatar} aria-hidden="true">
+                  <AvatarSprite frame={selectedMember.avatarFrame} size={48} />
+                </span>
+                <div>
+                  <span className={styles.eyebrow}>{selectedMember.rank}</span>
+                  <h2 className={styles.name}>{selectedMember.name}</h2>
+                </div>
+              </div>
+
+              <button className={styles.switchButton} type="button" onClick={handleSwitchRole}>
+                {HOLDOUMEN_COPY.switchRoleLabel}
+              </button>
+            </header>
+
+            <div className={styles.messages}>
+              {currentMessages.length === 0 ? (
+                <p className={styles.emptyState}>{HOLDOUMEN_COPY.emptyPrompt}</p>
+              ) : null}
+
+              {currentMessages.map((message) => {
+                const roleClass =
+                  message.role === "assistant" ? styles.messageAssistant : styles.messageUser;
+
+                return (
+                  <article className={`${styles.message} ${roleClass}`} key={message.id}>
+                    {message.role === "assistant" ? (
+                      <span className={styles.messageAvatar} aria-hidden="true">
+                        <AvatarSprite frame={selectedMember.avatarFrame} size={34} />
+                      </span>
+                    ) : null}
+
+                    <div className={styles.messageBubble}>{message.text}</div>
+                  </article>
+                );
+              })}
+
+              <div ref={messageEndRef} />
+            </div>
+
+            <form className={styles.composer} onSubmit={handleSubmit}>
+              <input
+                className={styles.input}
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                placeholder={HOLDOUMEN_COPY.inputPlaceholder}
+              />
+              <button className={styles.sendButton} type="submit" aria-label={HOLDOUMEN_COPY.sendLabel}>
+                <Image
+                  className={styles.sendIcon}
+                  src={HOLDOUMEN_IMAGES.sendIcon}
+                  alt=""
+                  width={22}
+                  height={22}
+                />
+              </button>
+            </form>
+          </section>
+        )}
+      </main>
+    </div>
+  );
+}
