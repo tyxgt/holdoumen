@@ -13,6 +13,8 @@ import type { ChatMessage, Member } from "@/types/holdoumen";
 import { AvatarSprite } from "../components/AvatarSprite";
 import { MemberCard } from "../components/MemberCard";
 import styles from "./HoldoumenApp.module.scss";
+import api from '@/service/api';
+import { sendMessage } from "@/service";
 
 type ViewMode = "picker" | "chat";
 
@@ -132,7 +134,7 @@ export function HoldoumenApp() {
     setViewMode("picker");
   }
 
-  function appendAssistantReply(memberId: string) {
+  function appendAssistantReply(memberId: string, content: string) {
     const member = HOLDOUMEN_MEMBERS.find((item) => item.id === memberId);
     if (!member) {
       return;
@@ -149,26 +151,14 @@ export function HoldoumenApp() {
         {
           id: nextMessageId(),
           role: "assistant",
-          text: reply,
+          text: content ?? reply,
         },
       ],
     }));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    if (!selectedMember) {
-      return;
-    }
-
-    const content = draft.trim();
-    if (!content) {
-      return;
-    }
-
-    clearReplyTimer();
-
     setMessagesByMember((previous) => ({
       ...previous,
       [selectedMember.id]: [
@@ -180,10 +170,26 @@ export function HoldoumenApp() {
         },
       ],
     }));
+    if (!selectedMember) {
+      return;
+    }
+
+    const content = draft.trim();
+    if (!content) {
+      return;
+    }
+
+    clearReplyTimer();
+    try {
+      const result = await sendMessage(content);
+      appendAssistantReply(selectedMember.id, result.answer);
+    } catch (error) {
+      console.error(error);
+    }
+
     setDraft("");
 
     replyTimerRef.current = window.setTimeout(() => {
-      appendAssistantReply(selectedMember.id);
       replyTimerRef.current = null;
     }, 420);
   }
