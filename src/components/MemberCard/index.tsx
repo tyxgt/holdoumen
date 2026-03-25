@@ -18,9 +18,20 @@ export function MemberCard({ member, onSelect }: MemberCardProps) {
   const cardStyle: CardStyle = {
     "--member-rgb": member.supportRgb,
   };
+  const handleClick = () => {
+    onSelect(member);
+  };
 
   return (
-    <button className={styles.card} style={cardStyle} type="button" onClick={() => onSelect(member)}>
+    <button
+      className={styles.card}
+      style={cardStyle}
+      type="button"
+      onClick={handleClick}
+      onTouchStart={handleClick}
+      tabIndex={0}
+      aria-label={`选择${member.name}`}
+    >
       <span className={styles.avatar} aria-hidden="true">
         <AvatarSprite frame={member.avatarFrame} size={62} />
       </span>
@@ -28,7 +39,7 @@ export function MemberCard({ member, onSelect }: MemberCardProps) {
       <span className={styles.content}>
         <span className={styles.rank}>{member.rank}</span>
         <strong className={styles.name}>{member.name}</strong>
-        <span className={styles.quote}>“{member.catchphrases[0]}”</span>
+        <span className={styles.quote}>"{member.catchphrases[0]}"</span>
       </span>
     </button>
   );
