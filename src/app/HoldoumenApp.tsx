@@ -10,11 +10,9 @@ import { HOLDOUMEN_MEMBERS } from "@/data/holdoumen/members";
 import { HOLDOUMEN_THEME } from "@/data/holdoumen/theme";
 import type { ChatMessage, Member } from "@/types/holdoumen";
 
-import { AvatarSprite } from "../components/AvatarSprite";
 import { MemberCard } from "../components/MemberCard";
 import styles from "./HoldoumenApp.module.scss";
-import api from '@/service/api';
-import { sendMessage } from "@/service";
+import { sendMessageStream } from "@/service";
 import ChatScreen from "./chat";
 
 type ViewMode = "picker" | "chat";
@@ -67,10 +65,12 @@ export function HoldoumenApp() {
   const [viewMode, setViewMode] = useState<ViewMode>("picker");
   const [selectedMemberId, setSelectedMemberId] = useState(HOLDOUMEN_MEMBERS[0]?.id ?? "");
   const [draft, setDraft] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const [messagesByMember, setMessagesByMember] = useState(buildInitialMessages);
 
   const replyIndexRef = useRef(buildInitialReplyState());
   const replyTimerRef = useRef<number | null>(null);
+  const activeRequestRef = useRef<AbortController | null>(null);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   const selectedMember =
@@ -112,6 +112,10 @@ export function HoldoumenApp() {
       if (replyTimerRef.current) {
         window.clearTimeout(replyTimerRef.current);
       }
+      if (activeRequestRef.current) {
+        activeRequestRef.current.abort();
+        activeRequestRef.current = null;
+      }
     };
   }, []);
 
@@ -122,8 +126,17 @@ export function HoldoumenApp() {
     }
   }
 
+  function abortActiveRequest() {
+    if (activeRequestRef.current) {
+      activeRequestRef.current.abort();
+      activeRequestRef.current = null;
+    }
+    setIsStreaming(false);
+  }
+
   function handleSelectMember(member: Member) {
     clearReplyTimer();
+    abortActiveRequest();
     setDraft("");
     setSelectedMemberId(member.id);
     setViewMode("chat");
@@ -131,47 +144,42 @@ export function HoldoumenApp() {
 
   function handleSwitchRole() {
     clearReplyTimer();
+    abortActiveRequest();
     setDraft("");
     setViewMode("picker");
   }
 
-  function appendAssistantReply(memberId: string, content: string) {
+  function getFallbackReply(memberId: string) {
     const member = HOLDOUMEN_MEMBERS.find((item) => item.id === memberId);
-    if (!member) {
-      return;
+    if (!member || member.replies.length === 0) {
+      return "";
     }
 
     const nextIndex = replyIndexRef.current[memberId] ?? 0;
     const reply = member.replies[nextIndex % member.replies.length];
     replyIndexRef.current[memberId] = nextIndex + 1;
+    return reply;
+  }
 
+  function setAssistantMessageText(memberId: string, messageId: string, content: string) {
     setMessagesByMember((previous) => ({
       ...previous,
-      [memberId]: [
-        ...(previous[memberId] ?? [createWelcomeMessage(member)]),
-        {
-          id: nextMessageId(),
-          role: "assistant",
-          text: content ?? reply,
-        },
-      ],
+      [memberId]: (previous[memberId] ?? []).map((message) =>
+        message.id === messageId ? { ...message, text: content } : message
+      ),
+    }));
+  }
+
+  function removeMessage(memberId: string, messageId: string) {
+    setMessagesByMember((previous) => ({
+      ...previous,
+      [memberId]: (previous[memberId] ?? []).filter((message) => message.id !== messageId),
     }));
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessagesByMember((previous) => ({
-      ...previous,
-      [selectedMember.id]: [
-        ...(previous[selectedMember.id] ?? [createWelcomeMessage(selectedMember)]),
-        {
-          id: nextMessageId(),
-          role: "user",
-          text: content,
-        },
-      ],
-    }));
-    if (!selectedMember) {
+    if (!selectedMember || isStreaming) {
       return;
     }
 
@@ -180,15 +188,63 @@ export function HoldoumenApp() {
       return;
     }
 
-    clearReplyTimer();
-    try {
-      const result = await sendMessage(content);
-      appendAssistantReply(selectedMember.id, result.answer);
-    } catch (error) {
-      console.error(error);
-    }
+    const memberId = selectedMember.id;
+    const userMessageId = nextMessageId();
+    const assistantMessageId = nextMessageId();
 
     setDraft("");
+    clearReplyTimer();
+    setMessagesByMember((previous) => ({
+      ...previous,
+      [memberId]: [
+        ...(previous[memberId] ?? [createWelcomeMessage(selectedMember)]),
+        {
+          id: userMessageId,
+          role: "user",
+          text: content,
+        },
+        {
+          id: assistantMessageId,
+          role: "assistant",
+          text: "",
+        },
+      ],
+    }));
+
+    const controller = new AbortController();
+    activeRequestRef.current = controller;
+    setIsStreaming(true);
+    let streamedText = "";
+
+    try {
+      const result = await sendMessageStream(content, {
+        signal: controller.signal,
+        onChunk: (chunk) => {
+          streamedText += chunk;
+          setAssistantMessageText(memberId, assistantMessageId, streamedText);
+        },
+      });
+
+      if (!streamedText.trim()) {
+        const answer = typeof result.answer === "string" ? result.answer : "";
+        const fallback = getFallbackReply(memberId);
+        setAssistantMessageText(memberId, assistantMessageId, answer || fallback);
+      }
+    } catch (error) {
+      if ((error as Error).name === "AbortError") {
+        if (!streamedText.trim()) {
+          removeMessage(memberId, assistantMessageId);
+        }
+        return;
+      }
+      console.error(error);
+      setAssistantMessageText(memberId, assistantMessageId, getFallbackReply(memberId));
+    } finally {
+      if (activeRequestRef.current === controller) {
+        activeRequestRef.current = null;
+      }
+      setIsStreaming(false);
+    }
 
     replyTimerRef.current = window.setTimeout(() => {
       replyTimerRef.current = null;
@@ -229,6 +285,7 @@ export function HoldoumenApp() {
           currentMessages={currentMessages}
           draft={draft}
           setDraft={setDraft}
+          isStreaming={isStreaming}
           messageEndRef={messageEndRef}
           handleSubmit={handleSubmit}
           handleSwitchRole={handleSwitchRole}

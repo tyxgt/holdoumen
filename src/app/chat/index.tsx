@@ -3,14 +3,10 @@ import styles from "./Chat.module.scss";
 import { HOLDOUMEN_IMAGES } from "@/data/holdoumen/images";
 import { AvatarSprite } from "@/components/AvatarSprite";
 import { HOLDOUMEN_COPY } from "@/data/holdoumen/copy";
+import type { Member } from "@/types/holdoumen";
 import Image from "next/image";
 interface ChatScreenProps {
-  selectedMember: {
-    id: string;
-    name: string;
-    rank: string;
-    avatarFrame: number;
-  };
+  selectedMember: Pick<Member, "id" | "name" | "rank" | "avatarFrame">;
   currentMessages: Array<{
     id: string;
     role: "user" | "assistant";
@@ -18,7 +14,8 @@ interface ChatScreenProps {
   }>;
   draft: string;
   setDraft: (value: string) => void;
-  messageEndRef: React.RefObject<HTMLDivElement>;
+  isStreaming: boolean;
+  messageEndRef: React.RefObject<HTMLDivElement | null>;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleSwitchRole: () => void;
 }
@@ -28,6 +25,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   currentMessages,
   draft,
   setDraft,
+  isStreaming,
   messageEndRef,
   handleSubmit,
   handleSwitchRole,
@@ -81,8 +79,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           placeholder={HOLDOUMEN_COPY.inputPlaceholder}
+          disabled={isStreaming}
         />
-        <button className={styles.sendButton} type="submit" aria-label={HOLDOUMEN_COPY.sendLabel}>
+        <button
+          className={styles.sendButton}
+          type="submit"
+          aria-label={HOLDOUMEN_COPY.sendLabel}
+          disabled={isStreaming}
+        >
           <Image
             className={styles.sendIcon}
             src={HOLDOUMEN_IMAGES.sendIcon}
