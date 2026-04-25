@@ -13,6 +13,7 @@ import type { ChatMessage, Member } from "@/types/holdoumen";
 import { MemberCard } from "../components/MemberCard";
 import styles from "./HoldoumenApp.module.scss";
 import { sendMessageStream } from "@/service";
+import { BallGame } from "./ball-game/BallGame";
 import ChatScreen from "./chat";
 
 type ViewMode = "picker" | "chat";
@@ -34,7 +35,6 @@ type AppStyle = CSSProperties & {
   "--shell-shadow": string;
   "--selected-member-rgb": string;
 };
-
 function createWelcomeMessage(member: Member): ChatMessage {
   return {
     id: `${member.id}-welcome`,
@@ -67,7 +67,6 @@ export function HoldoumenApp() {
   const [draft, setDraft] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [messagesByMember, setMessagesByMember] = useState(buildInitialMessages);
-
   const replyIndexRef = useRef(buildInitialReplyState());
   const replyTimerRef = useRef<number | null>(null);
   const activeRequestRef = useRef<AbortController | null>(null);
@@ -266,13 +265,15 @@ export function HoldoumenApp() {
                   className={styles.sign}
                   src={HOLDOUMEN_IMAGES.roadSign}
                   alt=""
-                  width={278}
-                  height={193}
+                  width={200}
+                  height={123}
                 />
               </div>
 
               <p className={styles.marquee}>{HOLDOUMEN_COPY.heroDescription}</p>
             </div>
+
+            <BallGame />
 
             <div className={styles.memberList} aria-label="成员列表">
               {HOLDOUMEN_MEMBERS.map((member) => (
@@ -291,6 +292,8 @@ export function HoldoumenApp() {
           handleSwitchRole={handleSwitchRole}
         />}
       </main>
+
+
     </div>
   );
 }

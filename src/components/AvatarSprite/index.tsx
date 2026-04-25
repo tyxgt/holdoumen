@@ -12,9 +12,25 @@ const SHEET_HEIGHT = 1480;
 type AvatarSpriteProps = {
   frame: AvatarFrame;
   size: number;
+  src?: string;
 };
 
-export function AvatarSprite({ frame, size }: AvatarSpriteProps) {
+export function AvatarSprite({ frame, size, src }: AvatarSpriteProps) {
+  if (src) {
+    return (
+      <span className={styles.sprite} style={{ width: `${size}px`, height: `${size}px` }} aria-hidden="true">
+        <Image
+          unoptimized
+          className={styles.image}
+          src={src}
+          alt=""
+          width={size}
+          height={size}
+        />
+      </span>
+    );
+  }
+
   const scale = size / frame.size;
   const width = Math.ceil(SHEET_WIDTH * scale);
   const height = Math.ceil(SHEET_HEIGHT * scale);
