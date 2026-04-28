@@ -1,43 +1,16 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
 
-import { HOLDOUMEN_IMAGES } from "@/data/holdoumen/images";
 import type { AvatarFrame } from "@/types/holdoumen";
 
 import styles from "./AvatarSprite.module.scss";
 
-const SHEET_WIDTH = 1070;
-const SHEET_HEIGHT = 1480;
-
 type AvatarSpriteProps = {
-  frame: AvatarFrame;
+  frame?: AvatarFrame;
   size: number;
-  src?: string;
+  src: string;
 };
 
-export function AvatarSprite({ frame, size, src }: AvatarSpriteProps) {
-  if (src) {
-    return (
-      <span className={styles.sprite} style={{ width: `${size}px`, height: `${size}px` }} aria-hidden="true">
-        <Image
-          unoptimized
-          className={styles.image}
-          src={src}
-          alt=""
-          width={size}
-          height={size}
-        />
-      </span>
-    );
-  }
-
-  const scale = size / frame.size;
-  const width = Math.ceil(SHEET_WIDTH * scale);
-  const height = Math.ceil(SHEET_HEIGHT * scale);
-  const imageStyle: CSSProperties = {
-    transform: `translate(${-frame.x * scale}px, ${-frame.y * scale}px)`,
-  };
-
+export function AvatarSprite({ size, src }: AvatarSpriteProps) {
   return (
     <span
       className={styles.sprite}
@@ -47,11 +20,10 @@ export function AvatarSprite({ frame, size, src }: AvatarSpriteProps) {
       <Image
         unoptimized
         className={styles.image}
-        src={HOLDOUMEN_IMAGES.avatarSheet}
+        src={src}
         alt=""
-        width={width}
-        height={height}
-        style={imageStyle}
+        width={size}
+        height={size}
       />
     </span>
   );

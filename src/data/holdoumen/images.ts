@@ -1,6 +1,6 @@
 export const HOLDOUMEN_IMAGES = {
   roadSign: "https://bsyimg.luoca.net/imgtc/20260428/31f6cb39c4cc7a7530e3d68465cb8bc4.webp",
-  sendIcon: "/icons/send.svg",
+  sendIcon: "/holdoumen/icons/send.svg",
   avatarSheet: "/avatars/avatar-sheet.png",
   memberAvatars: {
     "jiang-dunhao": "https://bsyimg.luoca.net/imgtc/20260428/d32671724e48550e00d6a53b34614d95.webp",

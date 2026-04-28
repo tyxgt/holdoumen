@@ -30,12 +30,17 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   handleSubmit,
   handleSwitchRole,
 }) => {
+  const avatarSrc =
+    HOLDOUMEN_IMAGES.memberAvatars[
+      selectedMember.id as keyof typeof HOLDOUMEN_IMAGES.memberAvatars
+    ];
+
   return (
     <section className={`${styles.screen} ${styles.chatScreen}`}>
       <header className={styles.chatHeader}>
         <div className={styles.chatMember}>
           <span className={styles.chatAvatar} aria-hidden="true">
-            <AvatarSprite frame={selectedMember.avatarFrame} size={48} />
+            <AvatarSprite frame={selectedMember.avatarFrame} size={48} src={avatarSrc} />
           </span>
           <div>
             <span className={styles.eyebrow}>{selectedMember.rank}</span>
@@ -61,7 +66,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
             <article className={`${styles.message} ${roleClass}`} key={message.id}>
               {message.role === "assistant" ? (
                 <span className={styles.messageAvatar} aria-hidden="true">
-                  <AvatarSprite frame={selectedMember.avatarFrame} size={34} />
+                  <AvatarSprite frame={selectedMember.avatarFrame} size={34} src={avatarSrc} />
                 </span>
               ) : null}
 
