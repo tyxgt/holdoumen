@@ -59,14 +59,15 @@
 
 .rank {
   color: rgba(var(--member-rgb), 0.98);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
 }
 
 .name {
   color: rgb(var(--member-rgb));
-  font-size: 22px;
+  font-size: 16px;
   line-height: 1.15;
   font-family: "Baskerville", "Songti SC", "STSong", serif;
   text-shadow: 0 2px 10px rgba(var(--member-rgb), 0.12);

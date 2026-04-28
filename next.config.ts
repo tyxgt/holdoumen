@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  output: 'export',
+  basePath: '/holdoumen',
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

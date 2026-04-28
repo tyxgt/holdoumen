@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import { HOLDOUMEN_IMAGES } from "@/data/holdoumen/images";
 import type { Member } from "@/types/holdoumen";
 
 import { AvatarSprite } from "../AvatarSprite";
@@ -21,6 +22,8 @@ export function MemberCard({ member, onSelect }: MemberCardProps) {
   const handleClick = () => {
     onSelect(member);
   };
+  const avatarSrc =
+    HOLDOUMEN_IMAGES.memberAvatars[member.id as keyof typeof HOLDOUMEN_IMAGES.memberAvatars];
 
   return (
     <button
@@ -33,13 +36,13 @@ export function MemberCard({ member, onSelect }: MemberCardProps) {
       aria-label={`选择${member.name}`}
     >
       <span className={styles.avatar} aria-hidden="true">
-        <AvatarSprite frame={member.avatarFrame} size={62} />
+        <AvatarSprite frame={member.avatarFrame} size={62} src={avatarSrc} />
       </span>
 
       <span className={styles.content}>
         <span className={styles.rank}>{member.rank}</span>
         <strong className={styles.name}>{member.name}</strong>
-        <span className={styles.quote}>"{member.catchphrases[0]}"</span>
+        <span className={styles.quote}>&quot;{member.catchphrases[0]}&quot;</span>
       </span>
     </button>
   );

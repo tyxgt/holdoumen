@@ -13,6 +13,7 @@ export type Member = {
   catchphrases: string[];
   greeting: string;
   replies: string[];
+  avatarImage?: string;
   avatarFrame: AvatarFrame;
 };
 

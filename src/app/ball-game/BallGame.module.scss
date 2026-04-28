@@ -1,0 +1,530 @@
+$accent-ink: #1f3d57;
+$accent-ink-strong: #163349;
+
+.trigger {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  background: rgba(251, 246, 236, 0.92);
+  box-shadow: 0 12px 28px rgba(96, 77, 45, 0.16);
+  color: $accent-ink-strong;
+  backdrop-filter: blur(18px);
+}
+
+.triggerIcon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(31, 60, 215, 0.18);
+  color: #1f3cd7;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.triggerText {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(241, 198, 82, 0.16), transparent 24%),
+    radial-gradient(circle at 86% 20%, rgba(77, 102, 219, 0.12), transparent 20%),
+    rgba(31, 36, 45, 0.34);
+  backdrop-filter: blur(14px);
+}
+
+.card {
+  position: relative;
+  width: min(100%, 390px);
+  border-radius: 30px;
+  padding: 18px 20px 20px;
+  background:
+    radial-gradient(circle at 24% 10%, rgba(255, 255, 255, 0.72), transparent 24%),
+    radial-gradient(circle at 84% 80%, rgba(224, 176, 56, 0.12), transparent 32%),
+    linear-gradient(180deg, #f9f1dc 0%, #edd19a 100%);
+  border: 1px solid rgba(255, 249, 236, 0.72);
+  box-shadow:
+    0 28px 64px rgba(85, 71, 32, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.closeButton {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(188, 165, 116, 0.24);
+  color: $accent-ink-strong;
+  font-size: 24px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.machineWrap {
+  position: relative;
+  width: min(100%, 306px);
+  aspect-ratio: 1 / 1.28;
+  margin: 8px auto 0;
+  isolation: isolate;
+  filter: drop-shadow(0 20px 28px rgba(190, 142, 43, 0.16));
+}
+
+.machineBase {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 3%;
+  height: 15%;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 246, 214, 0.72), transparent 22%),
+    linear-gradient(180deg, #e1bc69 0%, #b17f2f 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -10px 14px rgba(109, 77, 20, 0.18),
+    0 12px 20px rgba(157, 118, 36, 0.24);
+}
+
+.machineBase::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 28%;
+  height: 8%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  filter: blur(1px);
+}
+
+.machineStand {
+  position: absolute;
+  left: 50%;
+  bottom: 17%;
+  width: 20%;
+  height: 46%;
+  transform: translateX(-50%);
+  clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 214, 0.54), transparent 18%),
+    linear-gradient(180deg, rgba(231, 203, 133, 0.96), rgba(169, 125, 48, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset -10px 0 14px rgba(119, 88, 29, 0.12);
+}
+
+.machineShell {
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  top: 4%;
+  bottom: 19%;
+  clip-path: polygon(24% 2%, 76% 2%, 96% 22%, 96% 77%, 76% 96%, 24% 96%, 4% 77%, 4% 22%);
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.56), transparent 22%),
+    linear-gradient(112deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 24%, rgba(243, 237, 225, 0.12) 58%, rgba(255, 255, 255, 0.16) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(247, 238, 219, 0.08) 48%, rgba(226, 212, 181, 0.14));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(226, 217, 197, 0.22),
+    0 20px 30px rgba(191, 156, 88, 0.14);
+  backdrop-filter: blur(10px) saturate(1.04);
+}
+
+.machineShell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(24% 2%, 76% 2%, 96% 22%, 96% 77%, 76% 96%, 24% 96%, 4% 77%, 4% 22%);
+  border: 2px solid rgba(255, 255, 255, 0.62);
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 235, 212, 0.4),
+    inset 10px 0 16px rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.machineShell::after {
+  content: "";
+  position: absolute;
+  inset: 8% 20% 12% 12%;
+  clip-path: polygon(0 0, 80% 0, 100% 22%, 28% 100%, 0 84%);
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.02) 42%, rgba(255, 255, 255, 0.12) 100%);
+  opacity: 0.58;
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+.shellTop {
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  top: 3%;
+  height: 4%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 248, 234, 0.12));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 4px 10px rgba(186, 165, 123, 0.08);
+}
+
+.shellChute {
+  position: absolute;
+  left: 49%;
+  top: 7%;
+  width: 5px;
+  height: 18%;
+  margin-left: -3px;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(248, 239, 216, 0.2));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.shellSpark {
+  position: absolute;
+  left: 17%;
+  top: 18%;
+  width: 28%;
+  height: 44%;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.06) 56%, transparent 100%);
+  opacity: 0.28;
+  filter: blur(12px);
+}
+
+.shellHub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.92), rgba(245, 240, 230, 0.56) 52%, rgba(224, 212, 184, 0.36));
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.08),
+    0 0 10px rgba(255, 255, 255, 0.08);
+}
+
+.shellArms {
+  position: absolute;
+  inset: 0;
+}
+
+.shellArms span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 37%;
+  height: 3px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(242, 234, 220, 0.32));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transform-origin: left center;
+}
+
+.shellArms span:nth-child(1) {
+  transform: translateY(-50%) rotate(-62deg);
+}
+
+.shellArms span:nth-child(2) {
+  transform: translateY(-50%) rotate(4deg);
+}
+
+.shellArms span:nth-child(3) {
+  transform: translateY(-50%) rotate(66deg);
+}
+
+.shellArmsSpinning {
+  animation: armSpin 420ms linear infinite;
+}
+
+.shellWindow {
+  position: absolute;
+  inset: 11% 10% 19%;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.shellWindow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 70% 10%, rgba(255, 255, 255, 0.14), transparent 26%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.shellTray {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 8%;
+  height: 10%;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(241, 228, 190, 0.12));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(171, 138, 78, 0.1);
+  filter: blur(1px);
+}
+
+.machineSpout {
+  position: absolute;
+  left: 18%;
+  bottom: 16%;
+  width: 18%;
+  height: 11%;
+  z-index: 3;
+}
+
+.spoutSocket {
+  position: absolute;
+  left: 30%;
+  top: -28%;
+  width: 24%;
+  height: 54%;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(231, 201, 126, 0.96), rgba(190, 145, 54, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 6px 12px rgba(129, 95, 26, 0.12);
+}
+
+.spoutBody {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64%;
+  border-radius: 18px;
+  clip-path: polygon(8% 12%, 92% 12%, 100% 36%, 85% 100%, 15% 100%, 0 36%);
+  background:
+    linear-gradient(180deg, rgba(255, 244, 203, 0.72), transparent 22%),
+    linear-gradient(180deg, rgba(241, 219, 152, 0.98), rgba(179, 128, 41, 0.98));
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -10px 14px rgba(120, 78, 12, 0.2),
+    0 10px 16px rgba(129, 95, 26, 0.18);
+}
+
+.spoutInner {
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  top: 18%;
+  bottom: 16%;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 247, 215, 0.38), transparent 38%),
+    linear-gradient(180deg, rgba(90, 67, 31, 0.84), rgba(35, 24, 10, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -6px 8px rgba(0, 0, 0, 0.28);
+}
+
+.spoutLip {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 8%;
+  height: 16%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 249, 220, 0.08));
+  filter: blur(0.3px);
+}
+
+.spoutFlash {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 30%;
+  height: 34%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 231, 150, 0), rgba(255, 245, 207, 0.8), rgba(255, 231, 150, 0));
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.spoutFlashVisible {
+  animation: spoutFlash 620ms ease-out;
+}
+
+.machineRail {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 6%;
+  height: 10%;
+  z-index: 2;
+}
+
+.machineRailBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(238, 243, 244, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 6px 12px rgba(150, 129, 79, 0.12);
+}
+
+.machineRailBar:first-child {
+  top: 24%;
+}
+
+.machineRailBar:last-child {
+  top: 66%;
+}
+
+.ball {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.98) 0, rgba(255, 248, 200, 0.98) 18%, rgba(255, 214, 80, 0.98) 54%, #efb317 100%);
+  border: 1px solid rgba(184, 138, 27, 0.34);
+  color: #3f321d;
+  font-size: 12px;
+  font-weight: 800;
+  will-change: transform, left, top;
+}
+
+.ball::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.76), transparent 42%);
+  pointer-events: none;
+}
+
+.ballActive {
+  filter: saturate(1.06);
+}
+
+.ballLaunch {
+  animation: launchPulse 520ms ease-out 1;
+}
+
+.content {
+  padding: 6px 10px 2px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  color: $accent-ink-strong;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.description {
+  margin: 10px 0 0;
+  color: rgba(96, 95, 88, 0.82);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.action {
+  width: 100%;
+  margin-top: 18px;
+  padding: 15px 18px;
+  border: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #3056e6 0%, #6a44f1 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 16px 28px rgba(62, 74, 216, 0.28);
+}
+
+.action:disabled {
+  opacity: 0.72;
+}
+
+.result {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(235, 244, 242, 0.88);
+  color: $accent-ink;
+  box-shadow: inset 0 0 0 1px rgba(203, 217, 211, 0.8);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@keyframes armSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spoutFlash {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.5) translateY(2px);
+  }
+
+  20% {
+    opacity: 1;
+    transform: scaleX(1.1) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1.4) translateY(-2px);
+  }
+}
+
+@keyframes launchPulse {
+  0% {
+    filter: saturate(0.95) brightness(0.98);
+  }
+
+  30% {
+    filter: saturate(1.1) brightness(1.06);
+  }
+
+  100% {
+    filter: saturate(1) brightness(1);
+  }
+}
