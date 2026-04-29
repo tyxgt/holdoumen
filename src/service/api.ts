@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // 基础URL配置
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://holdoumenback-production.up.railway.app/';
 
 // 创建axios实例
 const apiClient: AxiosInstance = axios.create({
