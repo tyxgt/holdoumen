@@ -1,9 +1,3 @@
-export type AvatarFrame = {
-  x: number;
-  y: number;
-  size: number;
-};
-
 export type Member = {
   id: string;
   rank: string;
@@ -14,7 +8,6 @@ export type Member = {
   greeting: string;
   replies: string[];
   avatarImage?: string;
-  avatarFrame: AvatarFrame;
 };
 
 export type ChatMessage = {

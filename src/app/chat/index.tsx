@@ -6,7 +6,7 @@ import { HOLDOUMEN_COPY } from "@/data/holdoumen/copy";
 import type { Member } from "@/types/holdoumen";
 import Image from "next/image";
 interface ChatScreenProps {
-  selectedMember: Pick<Member, "id" | "name" | "rank" | "avatarFrame">;
+  selectedMember: Pick<Member, "id" | "name" | "rank">;
   currentMessages: Array<{
     id: string;
     role: "user" | "assistant";
@@ -40,7 +40,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       <header className={styles.chatHeader}>
         <div className={styles.chatMember}>
           <span className={styles.chatAvatar} aria-hidden="true">
-            <AvatarSprite frame={selectedMember.avatarFrame} size={48} src={avatarSrc} />
+            <AvatarSprite size={48} src={avatarSrc} />
           </span>
           <div>
             <span className={styles.eyebrow}>{selectedMember.rank}</span>
@@ -66,7 +66,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
             <article className={`${styles.message} ${roleClass}`} key={message.id}>
               {message.role === "assistant" ? (
                 <span className={styles.messageAvatar} aria-hidden="true">
-                  <AvatarSprite frame={selectedMember.avatarFrame} size={34} src={avatarSrc} />
+                  <AvatarSprite size={34} src={avatarSrc} />
                 </span>
               ) : null}
 

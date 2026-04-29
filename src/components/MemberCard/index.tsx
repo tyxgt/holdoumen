@@ -36,7 +36,7 @@ export function MemberCard({ member, onSelect }: MemberCardProps) {
       aria-label={`选择${member.name}`}
     >
       <span className={styles.avatar} aria-hidden="true">
-        <AvatarSprite frame={member.avatarFrame} size={62} src={avatarSrc} />
+        <AvatarSprite size={62} src={avatarSrc} />
       </span>
 
       <span className={styles.content}>

@@ -1,11 +1,8 @@
 import Image from "next/image";
 
-import type { AvatarFrame } from "@/types/holdoumen";
-
 import styles from "./AvatarSprite.module.scss";
 
 type AvatarSpriteProps = {
-  frame?: AvatarFrame;
   size: number;
   src: string;
 };

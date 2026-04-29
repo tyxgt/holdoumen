@@ -13,8 +13,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "我们晴天真不一般，慢慢说，我听着。",
       "后陡门先稳住节奏，再聊你的事。",
       "别在后面打闹，今天这局我来镇场子。",
-    ],
-    avatarFrame: { x: 30, y: 20, size: 300 },
+    ]
   },
   {
     id: "lu-zhuo",
@@ -28,8 +27,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "我们终于做了一件有结果的事，沅可太爱说了。",
       "哥哥在，哥哥来。",
       "后陡门最猛男人上线，先听你说。",
-    ],
-    avatarFrame: { x: 392, y: 20, size: 300 },
+    ]
   },
   {
     id: "li-gengyun",
@@ -43,8 +41,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "Mia Mia Mia，这事儿可以慢慢盘。",
       "快跑！有脏东西！不过你这个问题我能接。",
       "基建大王今天不干活，专心陪你聊天。",
-    ],
-    avatarFrame: { x: 755, y: 20, size: 300 },
+    ]
   },
   {
     id: "li-hao",
@@ -58,8 +55,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "给个麦你呗，你继续说，我来接。",
       "这段要是拍成片子，情绪已经很满了。",
       "别告诉赵小童，咱们先偷偷聊。",
-    ],
-    avatarFrame: { x: 23, y: 390, size: 305 },
+    ]
   },
   {
     id: "zhao-yibo",
@@ -73,8 +69,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "先别急，我给你捋一捋思路。",
       "别对着我咳嗽，咳嗽捂着点，然后慢慢说。",
       "华东麦王出手，事情总能讲清楚。",
-    ],
-    avatarFrame: { x: 390, y: 385, size: 300 },
+    ]
   },
   {
     id: "zhuo-yuan",
@@ -88,8 +83,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "我滴个亲娘啊，这话题还挺有意思。",
       "你先说，我会认真接住。",
       "鹭卓听了都得说一句，这波能聊。",
-    ],
-    avatarFrame: { x: 730, y: 380, size: 320 },
+    ]
   },
   {
     id: "zhao-xiaotong",
@@ -103,8 +97,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "我真惊了，不过这事儿也不是不能聊。",
       "没事儿真没事儿，你别慌。",
       "后陡门力王今天主打一个陪聊。",
-    ],
-    avatarFrame: { x: 30, y: 765, size: 310 },
+    ]
   },
   {
     id: "he-haonan",
@@ -118,8 +111,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "咕噜咕噜，我听懂你的意思了。",
       "好的理科生，这题我们按步骤来。",
       "后陡门车神先帮你把弯转过去。",
-    ],
-    avatarFrame: { x: 375, y: 765, size: 310 },
+    ]
   },
   {
     id: "chen-shaoxi",
@@ -133,8 +125,7 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "人生不就是白干加白干，但聊完会轻松一点。",
       "鸽鸽！我的好鸽鸽！你继续说。",
       "少塘主坐镇，这会儿先把心情顺一顺。",
-    ],
-    avatarFrame: { x: 748, y: 780, size: 290 },
+    ]
   },
   {
     id: "wang-yiheng",
@@ -148,7 +139,6 @@ export const HOLDOUMEN_MEMBERS: Member[] = [
       "汉堡，这个开场就很弟弟。",
       "保安队队长到位，今天这场子我看着。",
       "沅儿哥流的眼泪都是糖水吧，但你这事儿我认真听。",
-    ],
-    avatarFrame: { x: 38, y: 1134, size: 278 },
+    ]
   },
 ];
