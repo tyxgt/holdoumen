@@ -1,12 +1,8 @@
 import api from "./api";
+import type { CharacterName, ChatResponse } from "@/types/holdoumen";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://holdoumenback-production.up.railway.app/";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || (process.env.NODE_ENV === "development" ? "http://localhost:8000" : "https://holdoumenback-production.up.railway.app/");
 const CHAT_PATH = "/api/v1/chat";
-
-type ChatResponse = {
-  answer?: string;
-  [key: string]: unknown;
-};
 
 type SendMessageStreamOptions = {
   signal?: AbortSignal;
@@ -127,12 +123,13 @@ function consumeSSEBuffer(buffer: string, onChunk: (chunk: string) => void) {
   return remaining;
 }
 
-export const sendMessage = async (content: string) => {
-  return api.post<ChatResponse>(CHAT_PATH, { content });
+export const sendMessage = async (content: string, character: CharacterName) => {
+  return api.post<ChatResponse>(CHAT_PATH, { message: content, character });
 };
 
 export const sendMessageStream = async (
   content: string,
+  character: CharacterName,
   options: SendMessageStreamOptions
 ): Promise<ChatResponse> => {
   const headers: HeadersInit = {
@@ -148,7 +145,7 @@ export const sendMessageStream = async (
   const response = await fetch(resolveRequestUrl(CHAT_PATH), {
     method: "POST",
     headers,
-    body: JSON.stringify({ content, stream: true }),
+    body: JSON.stringify({ message: content, character, stream: true }),
     signal: options.signal,
   });
 

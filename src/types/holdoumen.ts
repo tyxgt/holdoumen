@@ -15,3 +15,30 @@ export type ChatMessage = {
   role: "assistant" | "user";
   text: string;
 };
+
+export const VALID_CHARACTERS = [
+  "蒋敦豪",
+  "鹭卓",
+  "李耕耘",
+  "李昊",
+  "赵一博",
+  "卓沅",
+  "赵小童",
+  "何浩楠",
+  "陈少熙",
+  "王一珩",
+] as const;
+
+export type CharacterName = (typeof VALID_CHARACTERS)[number];
+
+export type ChatRequest = {
+  message: string;
+  character: CharacterName;
+  stream?: boolean;
+};
+
+export type ChatResponse = {
+  answer: string;
+  model: string;
+  provider: string;
+};

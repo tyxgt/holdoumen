@@ -216,7 +216,7 @@ export function HoldoumenApp() {
     let streamedText = "";
 
     try {
-      const result = await sendMessageStream(content, {
+      const result = await sendMessageStream(content, selectedMember.name, {
         signal: controller.signal,
         onChunk: (chunk) => {
           streamedText += chunk;
