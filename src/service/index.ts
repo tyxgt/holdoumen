@@ -214,5 +214,9 @@ export const sendMessageStream = async (
     }
   }
 
-  return { answer: aggregatedText };
+  return {
+    answer: aggregatedText,
+    model: "stream",
+    provider: "fetch",
+  };
 };
