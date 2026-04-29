@@ -1,21 +1,3 @@
-export type Member = {
-  id: string;
-  rank: string;
-  name: string;
-  supportRgb: string;
-  aliases: string[];
-  catchphrases: string[];
-  greeting: string;
-  replies: string[];
-  avatarImage?: string;
-};
-
-export type ChatMessage = {
-  id: string;
-  role: "assistant" | "user";
-  text: string;
-};
-
 export const VALID_CHARACTERS = [
   "蒋敦豪",
   "鹭卓",
@@ -30,6 +12,24 @@ export const VALID_CHARACTERS = [
 ] as const;
 
 export type CharacterName = (typeof VALID_CHARACTERS)[number];
+
+export type Member = {
+  id: string;
+  rank: string;
+  name: CharacterName;
+  supportRgb: string;
+  aliases: string[];
+  catchphrases: string[];
+  greeting: string;
+  replies: string[];
+  avatarImage?: string;
+};
+
+export type ChatMessage = {
+  id: string;
+  role: "assistant" | "user";
+  text: string;
+};
 
 export type ChatRequest = {
   message: string;
