@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
   },
   output: 'export',
   basePath: '/holdoumen',
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/holdoumen',
+        permanent: false,
+        basePath: false,
+      },
+    ];
+  },
   images: {
     unoptimized: true,
   },

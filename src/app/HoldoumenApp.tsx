@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { CSSProperties, FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,6 +16,7 @@ import styles from "./HoldoumenApp.module.scss";
 import { sendMessageStream } from "@/service";
 import { BallGame } from "./ball-game/BallGame";
 import ChatScreen from "./chat";
+import { useAuth } from "@/context/AuthContext";
 
 type ViewMode = "picker" | "chat";
 
@@ -62,6 +64,8 @@ function nextMessageId() {
 }
 
 export function HoldoumenApp() {
+  const { isLoggedIn, isLoading } = useAuth();
+  const router = useRouter();
   const [viewMode, setViewMode] = useState<ViewMode>("picker");
   const [selectedMemberId, setSelectedMemberId] = useState(HOLDOUMEN_MEMBERS[0]?.id ?? "");
   const [draft, setDraft] = useState("");
@@ -71,6 +75,13 @@ export function HoldoumenApp() {
   const replyTimerRef = useRef<number | null>(null);
   const activeRequestRef = useRef<AbortController | null>(null);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  // 未登录用户重定向到登录页
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      router.push("/login");
+    }
+  }, [isLoggedIn, isLoading, router]);
 
   const selectedMember =
     HOLDOUMEN_MEMBERS.find((member) => member.id === selectedMemberId) ?? HOLDOUMEN_MEMBERS[0];
@@ -117,6 +128,18 @@ export function HoldoumenApp() {
       }
     };
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className={styles.app} style={appStyle}>
+        <main className={styles.phoneShell}>
+          <div className="flex items-center justify-center h-full">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   function clearReplyTimer() {
     if (replyTimerRef.current) {
