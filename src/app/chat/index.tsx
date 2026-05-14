@@ -5,6 +5,7 @@ import { AvatarSprite } from "@/components/AvatarSprite";
 import { HOLDOUMEN_COPY } from "@/data/holdoumen/copy";
 import type { Member } from "@/types/holdoumen";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 interface ChatScreenProps {
   selectedMember: Pick<Member, "id" | "name" | "rank">;
   currentMessages: Array<{
@@ -30,10 +31,16 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   handleSubmit,
   handleSwitchRole,
 }) => {
+  const { logout, user } = useAuth();
   const avatarSrc =
     HOLDOUMEN_IMAGES.memberAvatars[
       selectedMember.id as keyof typeof HOLDOUMEN_IMAGES.memberAvatars
     ];
+
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = "/";
+  };
 
   return (
     <section className={`${styles.screen} ${styles.chatScreen}`}>
@@ -48,10 +55,19 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           </div>
         </div>
 
-        <button className={styles.switchButton} type="button" onClick={handleSwitchRole}>
-          {HOLDOUMEN_COPY.switchRoleLabel}
-        </button>
+        <div className={styles.headerActions}>
+          <button className={styles.switchButton} type="button" onClick={handleSwitchRole}>
+            {HOLDOUMEN_COPY.switchRoleLabel}
+          </button>
+          <button className={styles.logoutButton} type="button" onClick={handleLogout}>
+            退出
+          </button>
+        </div>
       </header>
+
+      <div className={styles.userInfo}>
+        当前用户: {user?.username}
+      </div>
 
       <div className={styles.messages}>
         {currentMessages.length === 0 ? (
