@@ -15,7 +15,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>({ id: 1, username: "demo" });
+  const [user, setUser] = useState<User | null>({ id: 1, username: "demo", created_at: "2024-01-01" });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -24,8 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
       } catch {
-        // 在开发模式下，默认让用户登录
-        setUser({ id: 1, username: "demo" });
+        setUser({ id: 1, username: "demo", created_at: "2024-01-01" });
       } finally {
         setIsLoading(false);
       }
