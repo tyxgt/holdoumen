@@ -14,7 +14,6 @@ export default function LoginPage() {
   const { login, isLoading, isLoggedIn } = useAuth();
   const router = useRouter();
 
-  // 已登录用户重定向到首页
   useEffect(() => {
     if (isLoggedIn) {
       router.push("/");
@@ -43,7 +42,6 @@ export default function LoginPage() {
     try {
       await login(username.trim(), password);
       setSuccess("登录成功！正在跳转...");
-      // 登录成功后直接使用 router 跳转，由 AuthContext 更新触发上面的 useEffect 处理
     } catch (err) {
       setError((err as Error).message || "登录失败，请重试");
     }
@@ -54,7 +52,7 @@ export default function LoginPage() {
       <div className={styles.loginHeader}>
         <div className={styles.loginLogo}>后</div>
         <h1 className={styles.loginTitle}>后陡门 58 号</h1>
-        <p className={styles.loginSubtitle}>登录或注册您的账号</p>
+        <p className={styles.loginSubtitle}>欢迎回家</p>
       </div>
 
       <form className={styles.loginForm} onSubmit={handleSubmit}>
@@ -80,15 +78,6 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
           />
-          <div className={styles.passwordRules}>
-            <ul>
-              <li>至少8位字符</li>
-              <li>包含小写字母</li>
-              <li>包含大写字母</li>
-              <li>包含数字</li>
-              <li>包含特殊字符</li>
-            </ul>
-          </div>
         </div>
 
         {error && <p className={styles.errorMessage}>{error}</p>}

@@ -5,6 +5,7 @@ import { AvatarSprite } from "@/components/AvatarSprite";
 import { HOLDOUMEN_COPY } from "@/data/holdoumen/copy";
 import type { Member } from "@/types/holdoumen";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 interface ChatScreenProps {
   selectedMember: Pick<Member, "id" | "name" | "rank">;
@@ -31,7 +32,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   handleSubmit,
   handleSwitchRole,
 }) => {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
+  const router = useRouter();
   const avatarSrc =
     HOLDOUMEN_IMAGES.memberAvatars[
       selectedMember.id as keyof typeof HOLDOUMEN_IMAGES.memberAvatars
@@ -39,7 +41,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = "/";
+    router.push("/login");
   };
 
   return (
@@ -64,10 +66,6 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           </button>
         </div>
       </header>
-
-      <div className={styles.userInfo}>
-        当前用户: {user?.username}
-      </div>
 
       <div className={styles.messages}>
         {currentMessages.length === 0 ? (
