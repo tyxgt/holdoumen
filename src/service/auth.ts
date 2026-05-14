@@ -1,6 +1,6 @@
 import type { LoginRequest, LoginResponse, LogoutResponse, User } from "@/types/auth";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || (process.env.NODE_ENV === "development" ? "http://localhost:8000" : "https://holdoumenback-production.up.railway.app/");
 
 function resolveUrl(path: string): string {
   return new URL(path, BASE_URL).toString();

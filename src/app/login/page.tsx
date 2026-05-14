@@ -42,6 +42,7 @@ export default function LoginPage() {
     try {
       await login(username.trim(), password);
       setSuccess("登录成功！正在跳转...");
+      router.push("/");
     } catch (err) {
       setError((err as Error).message || "登录失败，请重试");
     }

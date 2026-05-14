@@ -15,8 +15,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>({ id: 1, username: "demo", created_at: "2024-01-01" });
-  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
       } catch {
-        setUser({ id: 1, username: "demo", created_at: "2024-01-01" });
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
